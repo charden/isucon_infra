@@ -1,0 +1,35 @@
+---
+  - name: Install etckeeper for Debian OS family
+    apt:
+      state: latest
+      name: '{{ item }}'
+    with_items:
+      - git
+      - etckeeper
+    when: ansible_os_family == 'Debian'
+    tags: package
+
+  - name: Install etckeeper for RedHat OS family
+    yum:
+      state: latest
+      name: '{{ item }}'
+    with_items:
+      - git
+      - etckeeper
+    when: ansible_os_family == 'RedHat'
+    tags: package
+
+  - name: Setup git user
+    git_config:
+      scope: global
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+    with_items:
+      - { name: 'user.name', value: 'isucon' }
+      - { name: 'user.email', value: 'isucon@localhost' }
+    tags: configuration
+
+
+  - name: First commit
+    shell: 'etckeeper init && if etckeeper unclean; then etckeeper commit -m "first commit."; fi'
+

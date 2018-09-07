@@ -1,0 +1,20 @@
+---
+  - name: Store the .gitconfig
+    copy:
+      src: .gitconfig
+      dest: '/home/{{ ansible_user }}/'
+
+  - name: Store the key to access gitlab.com
+    copy:
+      src: ~/.ssh/id_rsa_gitlab
+      dest: '/home/{{ ansible_user }}/.ssh/id_rsa_gitlab'
+      owner: '{{ ansible_user }}'
+      mode: 0600
+
+  - name: Modify .ssh/config to access gitlab.com
+    blockinfile:
+      path: '/home/{{ ansible_user }}/.ssh/config'
+      block: |
+        Host gitlab.com
+          HostName gitlab.com
+          IdentityFile ~/.ssh/id_rsa_gitlab

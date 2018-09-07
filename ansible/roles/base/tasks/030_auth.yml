@@ -1,0 +1,23 @@
+---
+  - name: Add ansible_user to sudoers
+    lineinfile:
+      dest: /etc/sudoers
+      line: '{{ item }}'
+    with_items:
+      - '{{ ansible_user }} ALL=(ALL) NOPASSWD: ALL'
+
+  - name:  Commit setting of sudoers
+    shell: 'if etckeeper unclean; then etckeeper commit -m "[Ansible] sudoers設定"; fi'
+
+  - name: Confirm the existence of ~/.ssh/config 
+    stat:
+      path: '/home/{{ ansible_user }}/.ssh/config'
+    register: ssh_config
+
+  - name: Create ~/.ssh/config
+    copy:
+      src: ssh_config
+      dest: '/home/{{ ansible_user }}/.ssh/config'
+      owner: '{{ ansible_user }}'
+      mode: 0600
+    when: not ssh_config.stat.exists

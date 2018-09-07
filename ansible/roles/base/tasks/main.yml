@@ -1,0 +1,11 @@
+---
+  - import_tasks: 000_install.yml
+  - import_tasks: 010_etckeeper.yml
+  - import_tasks: 020_network.yml
+  - import_tasks: 040_nginx.yml
+  - import_tasks: 050_redis.yml
+  - import_tasks: 070_ruby.yml
+  - import_tasks: 100_tuning.yml
+  - import_tasks: 200_mysql.yml
+  - import_tasks: 999_tools.yml
+  - import_tasks: 101_selinux.yml

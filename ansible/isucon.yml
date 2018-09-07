@@ -1,0 +1,5 @@
+- hosts: isucon
+  become: true
+  roles:
+    - base
+

@@ -1,0 +1,20 @@
+---
+  - name: Install mysqldef 
+    copy:
+      src: mysqldef
+      dest: /usr/local/bin/mysqldef
+      owner: root
+      group: root
+      mode: 0755
+  - name: Install vim htop for RedHat OS family
+    yum:
+      state: latest
+      name: '{{ item }}'
+    with_items:
+      - vim 
+      - htop
+      - ngrep
+      - dstat
+      - percona-toolkit
+    when: ansible_os_family == 'RedHat'
+    tags: package

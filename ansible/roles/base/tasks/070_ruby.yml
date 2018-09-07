@@ -1,0 +1,25 @@
+---
+  - name: Install rbenv
+    git:
+      repo: '{{ item.repo }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { repo: 'https://github.com/sstephenson/rbenv.git', dest: '/home/{{ ansible_user }}/.rbenv' }
+      - { repo: 'https://github.com/sstephenson/ruby-build.git', dest: '/home/{{ ansible_user }}/.rbenv/plugins/ruby-build' }
+
+  - name: Change owner of .rbenv
+    file:
+      path: '{{ item }}'
+      owner: '{{ ansible_user }}'
+    with_items:
+      - '/home/{{ ansible_user }}/.rbenv'
+
+  - name: Add rbenv definition to .bashrc
+    lineinfile:
+      state: present
+      path: '/home/{{ ansible_user }}/.bashrc'
+      insertafter: EOF
+      line: '{{ item }}'
+    with_items:
+      - 'export PATH="$HOME/.rbenv/bin:$PATH"'
+      - 'eval "$(rbenv init -)"'

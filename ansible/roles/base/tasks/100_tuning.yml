@@ -1,0 +1,18 @@
+---
+  - name: Update nofile limit to maximal value
+    pam_limits:
+      domain: '*'
+      limit_type: '-'
+      limit_item: nofile
+      value: 65536
+      use_max: true
+
+  - name: Update nproc limit to unlimited
+    pam_limits:
+      domain: '*'
+      limit_type: '-'
+      limit_item: nproc
+      value: unlimited
+
+  - name: Commit expand pam_limits
+    shell: 'if etckeeper unclean; then etckeeper commit -m "[Ansible] pam_limits設定"; fi'

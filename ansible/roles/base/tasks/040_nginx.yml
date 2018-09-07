@@ -1,0 +1,29 @@
+---
+  - name: Install alp 
+    copy:
+      src: alp_linux_amd64
+      dest: /usr/local/bin/alp
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Install kataribe
+    copy:
+      src: kataribe.toml
+      dest: //home/isucon/kataribe.toml
+      owner: isucon
+      group: isucon
+      mode: 0666
+
+  - name: Setup nginx
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { src: nginx/nginx.conf.template, dest: /etc/nginx }
+      - { src: nginx/conf.d/00_log_format.conf, dest: /etc/nginx/conf.d }
+      - { src: nginx/conf.d/10_webserver.conf, dest: /etc/nginx/conf.d }
+
+  - name: Commit setup of nginx
+    shell: 'if etckeeper unclean; then etckeeper commit -m "[Ansible] Nginx設定"; fi'
+
