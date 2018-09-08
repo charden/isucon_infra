@@ -6,7 +6,14 @@
       owner: root
       group: root
       mode: 0755
-  - name: Install vim htop for RedHat OS family
+  - name: Install mysqldef 
+    copy:
+      src: postatprof
+      dest: /usr/local/bin/postatprof
+      owner: root
+      group: root
+      mode: 0755
+  - name: Install tools for RedHat OS family
     yum:
       state: latest
       name: '{{ item }}'

@@ -1,6 +1,0 @@
----
-  - name: Store the .vimrc
-    copy:
-      src: .vimrc
-      dest: '/home/{{ ansible_user }}/'
-      owner: '{{ ansible_user }}'
