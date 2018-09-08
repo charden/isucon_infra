@@ -6,10 +6,17 @@
       owner: root
       group: root
       mode: 0755
-  - name: Install mysqldef 
+  - name: Install pgstatprof
     copy:
-      src: postatprof
-      dest: /usr/local/bin/postatprof
+      src: pgstatprof
+      dest: /usr/local/bin/pgstatprof
+      owner: root
+      group: root
+      mode: 0755
+  - name: Install myprofiler 
+    copy:
+      src: myprofiler
+      dest: /usr/local/bin/myprofiler
       owner: root
       group: root
       mode: 0755
@@ -22,6 +29,6 @@
       - htop
       - ngrep
       - dstat
-      - percona-toolkit
+      - https://www.percona.com/downloads/percona-toolkit/3.0.11/binary/redhat/7/x86_64/percona-toolkit-3.0.11-1.el7.x86_64.rpm
     when: ansible_os_family == 'RedHat'
     tags: package
