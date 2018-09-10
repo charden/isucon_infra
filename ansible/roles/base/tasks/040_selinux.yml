@@ -1,13 +1,13 @@
 ---
 - name: Install libselinux-python
-  yum: name=libselinux-python state=present
+  yum:
+    name: libselinux-python
+    state: present
+  when: ansible_os_family == 'RedHat'
 
-- name: Check status of selinux
-  shell: getenforce
+- name: Disable SELinux permanently
+  selinux:
+    state: disabled
+  when: ansible_os_family == 'RedHat'
 
-- name: Permissive selinux
-  selinux: policy=targeted state=permissive
-
-- name: reboot after change selinux
-  shell: sleep 2s && /sbin/reboot &
-
+- shell: 'if etckeeper unclean; then etckeeper commit -m "Ansible - Disable SELinux"; fi'

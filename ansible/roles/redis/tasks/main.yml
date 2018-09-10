@@ -1,40 +1,44 @@
 ---
-  - name: Install redis for Debian OS family
-    apt:
-      state: latest
-      name: '{{ item }}'
-    with_items:
-      - redis-server
-    when: ansible_os_family == 'Debian'
+- name: Install redis for Debian OS family
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - redis-server
+  when: ansible_os_family == 'Debian'
 
-  - name: Install redis for RedHat OS family
-    yum:
-      state: latest
-      name: '{{ item }}'
-    with_items:
-      - redis
-    when: ansible_os_family == 'RedHat'
+- name: Setup redis
+  replace:
+    path: /etc/redis/redis.conf
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
+  with_items:
+    - { regexp: '^daemonize\s*no', replace: 'daemonize yes' }
+    - { regexp: '^bind\s*127.0.0.1', replace: 'bind 0.0.0.0' }
+  when: ansible_os_family == 'Debian'
 
-  - name: Setup redis
-    replace:
-      path: /etc/redis/redis.conf
-      regexp: '{{ item.regexp }}'
-      replace: '{{ item.replace }}'
-    with_items:
-      - { regexp: '^(?<=daemonize)\s*no', replace: ' yes' }
-    when: ansible_os_family == 'Debian'
+- name: Install redis for RedHat OS family
+  yum:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - redis
+  when: ansible_os_family == 'RedHat'
 
-  - name: Setup redis
-    replace:
-      path: /etc/redis.conf
-      regexp: '{{ item.regexp }}'
-      replace: '{{ item.replace }}'
-    with_items:
-      - { regexp: '^(?<=daemonize)\s*no', replace: ' yes' }
-      - { regexp: '^(?<=bind) 127\.0\.0\.1$', replace: ' 0.0.0.0' }
-    when: ansible_os_family == 'RedHat'
+- name: Setup redis
+  replace:
+    path: /etc/redis.conf
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
+  with_items:
+    - { regexp: '^daemonize\s*no', replace: 'daemonize yes' }
+    - { regexp: '^bind\s*127\.0\.0\.1$', replace: 'bind 0.0.0.0' }
+  when: ansible_os_family == 'RedHat'
 
+- name: Enable and start service redis
+  systemd:
+    name: redis
+    state: started
+    enabled: true
 
-  - name: Commit setup of redis
-    shell: 'if etckeeper unclean; then etckeeper commit -m "[Ansible] redis設定"; fi'
-
+- shell: 'if etckeeper unclean; then etckeeper commit -m "Ansible - Setup redis"; fi'

@@ -1,0 +1,15 @@
+---
+  - name: Store the .zshrc
+    copy:
+      src: .zshrc
+      dest: '/home/{{ ansible_user }}/'
+
+  - name: Install peco 
+    copy:
+      src: peco
+      dest: /usr/local/bin/peco
+      owner: root
+      group: root
+      mode: 0755
+
+  

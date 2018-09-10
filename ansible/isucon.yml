@@ -2,4 +2,9 @@
   become: true
   roles:
     - base
+    - nginx
+    - redis
+    - mysql
+    - postgresql
+    - ruby
 

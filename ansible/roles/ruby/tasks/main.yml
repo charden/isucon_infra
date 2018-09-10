@@ -1,4 +1,21 @@
 ---
+  - name: Install dependency for RedHat OS family
+    yum:
+      state: latest
+      name: '{{ item }}'
+    with_items:
+      - "@Development tools"
+      - readline-devel
+    when: ansible_os_family == 'RedHat'
+
+  - name: Install dependency for Debian OS family
+    yum:
+      state: latest
+      name: '{{ item }}'
+    with_items:
+      - build-essential
+    when: ansible_os_family == 'Debian'
+
   - name: Install rbenv
     git:
       repo: '{{ item.repo }}'
@@ -23,3 +40,15 @@
     with_items:
       - 'export PATH="$HOME/.rbenv/bin:$PATH"'
       - 'eval "$(rbenv init -)"'
+
+  - name: rubyのインストール
+    shell: bash -lc "CONFIGURE_OPTS="--disable-install-rdoc" ~/.rbenv/bin/rbenv install -s 2.5.1"
+    become: false
+
+  - name: ruby global
+    shell: bash -lc "~/.rbenv/bin/rbenv global 2.5.1"
+    become: false
+
+  - name: gem アップグレード
+    shell: bash -lc "~/.rbenv/versions/2.5.1/bin/gem update --system"
+    become: false
