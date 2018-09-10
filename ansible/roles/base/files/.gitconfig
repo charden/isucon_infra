@@ -1,3 +1,6 @@
+[user]
+        name = isucon
+        email = isucon@localhost
 [color]
         diff = auto
         status = auto
