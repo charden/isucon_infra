@@ -12,4 +12,9 @@
       group: root
       mode: 0755
 
+  - name: clone repository
+    git:
+      repo: git://github.com/rupa/z
+      dest: /home/{{ ansible_user }}/.zsh.d
+
   
