@@ -1,19 +1,31 @@
 ---
-- name: Setup postgres.conf for CentOS
-  replace:
-    path: /var/lib/pgsql/data/postgresql.conf
-    regexp: '{{ item.regexp }}'
-    replace: '{{ item.replace }}'
-  with_items:
-    - { regexp: "^max_connections =[0-9]+", replace: "max_connections = 1000" }
-    - { regexp: "^#listen_addresses = 'localhost'", replace: "listen_addresses = '*'" }
-  when: ansible_os_family == 'RedHat'
+  - name: Setup postgres.conf for CentOS
+    replace:
+      path: /var/lib/pgsql/data/postgresql.conf
+      regexp: '{{ item.regexp }}'
+      replace: '{{ item.replace }}'
+    with_items:
+      - { regexp: "^max_connections =[0-9]+", replace: "max_connections = 1000" }
+      - { regexp: "^#listen_addresses = 'localhost'", replace: "listen_addresses = '*'" }
+    when: ansible_os_family == 'RedHat'
 
-- name: Restart postgresql
-  systemd:
-    name: postgresql
-    state: restarted
-    daemon_reload: yes
-  when: ansible_os_family == 'RedHat'
+  - name: Restart postgresql
+    systemd:
+      name: postgresql
+      state: restarted
+      daemon_reload: yes
+    when: ansible_os_family == 'RedHat'
 
-- shell: 'if etckeeper unclean; then etckeeper commit -m "Ansible - Setup postgresql"; fi'
+  - name: Install cargo
+    shell: curl -y https://sh.rustup.rs -sSf | sh
+
+  - name: Add cargo definition to .bashrc
+    lineinfile:
+      state: present
+      path: '/home/{{ ansible_user }}/.bashrc'
+      insertafter: EOF
+      line: '{{ item }}'
+    with_items:
+      - 'export PATH="$HOME/.cargo/bin:$PATH"'
+
+  - shell: 'if etckeeper unclean; then etckeeper commit -m "Ansible - Setup postgresql"; fi'
