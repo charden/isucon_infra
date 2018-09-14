@@ -6,6 +6,7 @@
     with_items:
       - "@Development tools"
       - readline-devel
+      - jemalloc-devel
     when: ansible_os_family == 'RedHat'
 
   - name: Install dependency for Debian OS family
@@ -42,7 +43,7 @@
       - 'eval "$(rbenv init -)"'
 
   - name: rubyのインストール
-    shell: bash -lc "CONFIGURE_OPTS="--disable-install-rdoc" ~/.rbenv/bin/rbenv install -s 2.5.1"
+    shell: bash -lc "CONFIGURE_OPTS="--disable-install-rdoc --with-jemalloc" ~/.rbenv/bin/rbenv install -s 2.5.1"
     become: false
 
   - name: ruby global

@@ -7,7 +7,7 @@
       - "@Development tools"
       - openssl-devel
       - zlib-devel
-      - vim 
+      - vim
       - htop
       - ngrep
       - dstat
