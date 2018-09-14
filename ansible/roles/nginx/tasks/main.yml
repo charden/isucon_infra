@@ -15,6 +15,22 @@
       group: isucon
       mode: 0666
 
+  - name: cp rotate.sh
+    copy:
+      src: rotate.sh
+      dest: /home/isucon/rotate.sh
+      owner: isucon
+      group: isucon
+      mode: 0777
+
+  - name: Install deploy.sh
+    copy:
+      src: deploy.sh
+      dest: /home/isucon/deploy.sh
+      owner: isucon
+      group: isucon
+      mode: 0777
+
   - name: Setup nginx
     copy:
       src: '{{ item.src }}'
