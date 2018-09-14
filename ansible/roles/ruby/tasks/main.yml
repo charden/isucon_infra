@@ -17,6 +17,22 @@
       - build-essential
     when: ansible_os_family == 'Debian'
 
+  - name: Install systemd file
+    copy:
+      src: isucon_systemd
+      dest: /home/isucon/isucon_systemd
+      owner: isucon
+      group: isucon
+      mode: 0666
+
+  - name: Install puma.rb
+    copy:
+      src: puma.rb
+      dest: /home/isucon/puma.rb
+      owner: isucon
+      group: isucon
+      mode: 0666
+
   - name: Install rbenv
     git:
       repo: '{{ item.repo }}'
